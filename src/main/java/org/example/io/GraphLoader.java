@@ -5,7 +5,6 @@ import org.example.graph.Graph;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
-
 public class GraphLoader {
     public static Graph loadGraph(String path) {
         try {

@@ -1,7 +1,6 @@
 package org.example.graph;
 import java.util.HashMap;
 import java.util.Map;
-
 public class DisjointSet {
     private final Map<String, String> parent = new HashMap<>();
     public void add(String x) {

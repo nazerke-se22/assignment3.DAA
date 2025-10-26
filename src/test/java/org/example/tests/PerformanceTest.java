@@ -13,10 +13,10 @@ public class PerformanceTest {
     @Test
     public void runBenchmarkAndProduceCsv() throws Exception {
         String[] files = {
-                "src/main/resources/datasets/graphs_small.json",
-                "src/main/resources/datasets/graphs_medium.json",
-                "src/main/resources/datasets/graphs_large.json",
-                "src/main/resources/datasets/graphs_extra_large.json"
+                "src/main/resources/jsons/graphs_small.json",
+                "src/main/resources/jsons/graphs_medium.json",
+                "src/main/resources/jsons/graphs_large.json",
+                "src/main/resources/jsons/graphs_extra_large.json"
         };
         List<String[]> csvRows = new ArrayList<>();
         csvRows.add(new String[]{"GraphID","Algorithm","Vertices","Edges","ExecutionTimeMs","OperationsCount","TotalCost"});

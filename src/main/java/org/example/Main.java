@@ -5,7 +5,6 @@ import org.example.io.ResultsWriter;
 import org.example.algorithms.Kruskal;
 import org.example.algorithms.Prim;
 import org.example.Model.MSTResult;
-
 public class Main {
     public static void main(String[] args) {
         System.out.println("===== MST Analysis Start =====");

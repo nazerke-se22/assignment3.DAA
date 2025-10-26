@@ -12,8 +12,8 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class BenchmarkRunner {
+    private static final int REPEAT_COUNT = 100;
     public static void main(String[] args) throws Exception {
-
         String[] files = {
                 "src/main/resources/jsons/graphs_small.json",
                 "src/main/resources/jsons/graphs_medium.json",
@@ -23,71 +23,79 @@ public class BenchmarkRunner {
 
         List<MSTOutput> outputs = new ArrayList<>();
         Prim primAlg = new Prim();
-
         List<CSVRecord> csvRecords = new ArrayList<>();
 
         for (String file : files) {
             System.out.println("Loading graphs from: " + file);
             List<Graph> graphs = GraphLoader.loadGraphs(file);
-
-            if (graphs == null || graphs.isEmpty()) {
-                System.out.println("No graphs found in " + file);
-                continue;
-            }
+            if (graphs == null || graphs.isEmpty()) continue;
 
             for (Graph g : graphs) {
-                if (!isConnected(g)) {
-                    System.out.println("Skipping disconnected graph: " + g.id());
-                    continue;
-                }
+                if (!isConnected(g)) continue;
 
                 System.out.println("Running algorithms for graph: " + g.id());
-                MSTResult prim = primAlg.computeMST(g);
-                MSTResult kruskal = Kruskal.run(g);
+
+                MSTResult bestPrim = null, bestKruskal = null;
+                double totalPrim = 0, totalKruskal = 0;
+
+                for (int i = 0; i < REPEAT_COUNT; i++) {
+                    MSTResult prim = primAlg.computeMST(g);
+                    MSTResult kruskal = Kruskal.run(g);
+
+                    totalPrim += prim.getExecutionTimeMs();
+                    totalKruskal += kruskal.getExecutionTimeMs();
+
+                    if (bestPrim == null) bestPrim = prim;
+                    if (bestKruskal == null) bestKruskal = kruskal;
+                }
+
+                double avgPrimTime = totalPrim / REPEAT_COUNT;
+                double avgKruskalTime = totalKruskal / REPEAT_COUNT;
 
                 MSTOutput.InputStats stats = new MSTOutput.InputStats(g.V(), g.E());
                 MSTOutput.MSTData primData = new MSTOutput.MSTData(
-                        prim.getEdges(),
-                        prim.getTotalCost(),
-                        prim.getOperationsCount(),
-                        prim.getExecutionTimeMs()
+                        bestPrim.getEdges(),
+                        bestPrim.getTotalCost(),
+                        bestPrim.getOperationsCount(),
+                        avgPrimTime
                 );
                 MSTOutput.MSTData kruskalData = new MSTOutput.MSTData(
-                        kruskal.getEdges(),
-                        kruskal.getTotalCost(),
-                        kruskal.getOperationsCount(),
-                        kruskal.getExecutionTimeMs()
+                        bestKruskal.getEdges(),
+                        bestKruskal.getTotalCost(),
+                        bestKruskal.getOperationsCount(),
+                        avgKruskalTime
                 );
 
                 outputs.add(new MSTOutput(g.id(), stats, primData, kruskalData));
 
                 csvRecords.add(new CSVRecord(g.id(), "Kruskal", g.V(), g.E(),
-                        kruskal.getExecutionTimeMs(), kruskal.getOperationsCount(), kruskal.getTotalCost()));
+                        avgKruskalTime, bestKruskal.getOperationsCount(), bestKruskal.getTotalCost()));
                 csvRecords.add(new CSVRecord(g.id(), "Prim", g.V(), g.E(),
-                        prim.getExecutionTimeMs(), prim.getOperationsCount(), prim.getTotalCost()));
+                        avgPrimTime, bestPrim.getOperationsCount(), bestPrim.getTotalCost()));
+
+                System.out.printf(Locale.US,
+                        "Graph %s → Kruskal=%.6f ms | Prim=%.6f ms%n",
+                        g.id(), avgKruskalTime, avgPrimTime);
             }
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> resultMap = new LinkedHashMap<>();
-        resultMap.put("results", outputs);
-
         File jsonFile = new File("src/main/resources/jsons/output.json");
         jsonFile.getParentFile().mkdirs();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(jsonFile, resultMap);
-        System.out.println("JSON saved to: " + jsonFile.getPath());
+        mapper.writerWithDefaultPrettyPrinter()
+                .writeValue(jsonFile, Map.of("results", outputs));
 
         File csvFile = new File("src/main/resources/jsons/benchmark_results.csv");
         try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
             writer.println("GraphID,Algorithm,Vertices,Edges,ExecutionTimeMs,OperationsCount,TotalCost");
             for (CSVRecord r : csvRecords) {
-                writer.printf(Locale.US, "%s,%s,%d,%d,%.0f,%d,%.0f%n",
+                writer.printf(Locale.US, "%s,%s,%d,%d,%.6f,%d,%.2f%n",
                         r.graphId, r.algorithm, r.vertices, r.edges,
                         r.executionTimeMs, r.operationsCount, r.totalCost);
             }
         }
-        System.out.println("CSV saved to: " + csvFile.getPath());
-        System.out.println("All benchmark results successfully generated!");
+
+        System.out.println("Benchmark finished. Results saved to CSV & JSON.");
     }
 
     private static boolean isConnected(Graph graph) {
@@ -97,6 +105,7 @@ public class BenchmarkRunner {
         String start = graph.getVertices().get(0);
         visited.add(start);
         queue.add(start);
+
         while (!queue.isEmpty()) {
             String v = queue.poll();
             for (var e : graph.adj(v)) {
