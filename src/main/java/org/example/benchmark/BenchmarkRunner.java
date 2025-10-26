@@ -10,20 +10,22 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.*;
-
 public class BenchmarkRunner {
     private static final int REPEAT_COUNT = 100;
+    private static final int MAX_GRAPHS = 28;
     public static void main(String[] args) throws Exception {
         String[] files = {
-                "src/main/resources/jsons/graphs_small.json",
-                "src/main/resources/jsons/graphs_medium.json",
-                "src/main/resources/jsons/graphs_large.json",
-                "src/main/resources/jsons/graphs_extra_large.json"
+                "src/main/resources/datasets/graphs_small.json",
+                "src/main/resources/datasets/graphs_medium.json",
+                "src/main/resources/datasets/graphs_large.json",
+                "src/main/resources/datasets/graphs_extra_large.json"
         };
-
         List<MSTOutput> outputs = new ArrayList<>();
         Prim primAlg = new Prim();
         List<CSVRecord> csvRecords = new ArrayList<>();
+        int globalId = 1;
+
+        int processedGraphs = 0;
 
         for (String file : files) {
             System.out.println("Loading graphs from: " + file);
@@ -31,7 +33,10 @@ public class BenchmarkRunner {
             if (graphs == null || graphs.isEmpty()) continue;
 
             for (Graph g : graphs) {
+                if (processedGraphs >= MAX_GRAPHS) break;
+
                 if (!isConnected(g)) continue;
+                g.setId(String.valueOf(globalId++));
 
                 System.out.println("Running algorithms for graph: " + g.id());
 
@@ -65,7 +70,6 @@ public class BenchmarkRunner {
                         bestKruskal.getOperationsCount(),
                         avgKruskalTime
                 );
-
                 outputs.add(new MSTOutput(g.id(), stats, primData, kruskalData));
 
                 csvRecords.add(new CSVRecord(g.id(), "Kruskal", g.V(), g.E(),
@@ -76,16 +80,26 @@ public class BenchmarkRunner {
                 System.out.printf(Locale.US,
                         "Graph %s → Kruskal=%.6f ms | Prim=%.6f ms%n",
                         g.id(), avgKruskalTime, avgPrimTime);
+                processedGraphs++;
+            }
+            if (processedGraphs >= MAX_GRAPHS) {
+                break;
             }
         }
-
+        csvRecords.sort((r1, r2) -> {
+            int graphIdComparison = Integer.compare(Integer.parseInt(r1.graphId), Integer.parseInt(r2.graphId));
+            if (graphIdComparison == 0) {
+                return r1.algorithm.equals("Kruskal") ? -1 : 1;
+            }
+            return graphIdComparison;
+        });
         ObjectMapper mapper = new ObjectMapper();
-        File jsonFile = new File("src/main/resources/jsons/output.json");
+        File jsonFile = new File("src/main/resources/datasets/output.json");
         jsonFile.getParentFile().mkdirs();
         mapper.writerWithDefaultPrettyPrinter()
                 .writeValue(jsonFile, Map.of("results", outputs));
 
-        File csvFile = new File("src/main/resources/jsons/benchmark_results.csv");
+        File csvFile = new File("src/main/resources/datasets/benchmark_results.csv");
         try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
             writer.println("GraphID,Algorithm,Vertices,Edges,ExecutionTimeMs,OperationsCount,TotalCost");
             for (CSVRecord r : csvRecords) {
@@ -94,10 +108,7 @@ public class BenchmarkRunner {
                         r.executionTimeMs, r.operationsCount, r.totalCost);
             }
         }
-
-        System.out.println("Benchmark finished. Results saved to CSV & JSON.");
     }
-
     private static boolean isConnected(Graph graph) {
         if (graph.V() == 0) return true;
         Set<String> visited = new HashSet<>();

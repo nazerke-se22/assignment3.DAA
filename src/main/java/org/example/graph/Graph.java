@@ -1,7 +1,7 @@
 package org.example.graph;
 import java.util.*;
 public class Graph {
-    private final String id;
+    private String id;
     private final boolean directed;
     private final List<String> vertices;
     private final List<Edge> edges;
@@ -15,7 +15,6 @@ public class Graph {
         this.edges = new ArrayList<>(edges);
         this.adj = new HashMap<>();
         this.indexMap = new HashMap<>();
-
         for (int i = 0; i < vertices.size(); i++) {
             String vertex = vertices.get(i);
             indexMap.put(vertex, i);
@@ -30,6 +29,9 @@ public class Graph {
     }
     public String id() {
         return id;
+    }
+    public void setId(String newId) {
+        this.id = newId;
     }
     public int V() {
         return vertices.size();
