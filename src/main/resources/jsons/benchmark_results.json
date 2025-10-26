@@ -1,0 +1,173 @@
+{
+  "benchmark_results" : [ {
+    "graphId" : "1",
+    "vertices" : 15,
+    "edges" : 30,
+    "primTotalCost" : 59.0,
+    "kruskalTotalCost" : 59.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 88,
+    "kruskalOps" : 61
+  }, {
+    "graphId" : "2",
+    "vertices" : 8,
+    "edges" : 16,
+    "primTotalCost" : 35.0,
+    "kruskalTotalCost" : 35.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 47,
+    "kruskalOps" : 33
+  }, {
+    "graphId" : "3",
+    "vertices" : 20,
+    "edges" : 40,
+    "primTotalCost" : 114.0,
+    "kruskalTotalCost" : 114.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 123,
+    "kruskalOps" : 84
+  }, {
+    "graphId" : "4",
+    "vertices" : 22,
+    "edges" : 44,
+    "primTotalCost" : 157.0,
+    "kruskalTotalCost" : 157.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 171,
+    "kruskalOps" : 110
+  }, {
+    "graphId" : "5",
+    "vertices" : 10,
+    "edges" : 20,
+    "primTotalCost" : 35.0,
+    "kruskalTotalCost" : 35.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 60,
+    "kruskalOps" : 42
+  }, {
+    "graphId" : "6",
+    "vertices" : 284,
+    "edges" : 852,
+    "primTotalCost" : 1235.0,
+    "kruskalTotalCost" : 1235.0,
+    "primExecutionMs" : 1,
+    "kruskalExecutionMs" : 1,
+    "primOps" : 3308,
+    "kruskalOps" : 1939
+  }, {
+    "graphId" : "7",
+    "vertices" : 113,
+    "edges" : 339,
+    "primTotalCost" : 463.0,
+    "kruskalTotalCost" : 463.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 1193,
+    "kruskalOps" : 713
+  }, {
+    "graphId" : "8",
+    "vertices" : 214,
+    "edges" : 642,
+    "primTotalCost" : 1016.0,
+    "kruskalTotalCost" : 1016.0,
+    "primExecutionMs" : 1,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 2516,
+    "kruskalOps" : 1484
+  }, {
+    "graphId" : "9",
+    "vertices" : 39,
+    "edges" : 117,
+    "primTotalCost" : 151.0,
+    "kruskalTotalCost" : 151.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 424,
+    "kruskalOps" : 258
+  }, {
+    "graphId" : "10",
+    "vertices" : 53,
+    "edges" : 159,
+    "primTotalCost" : 225.0,
+    "kruskalTotalCost" : 225.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 509,
+    "kruskalOps" : 316
+  }, {
+    "graphId" : "11",
+    "vertices" : 154,
+    "edges" : 462,
+    "primTotalCost" : 787.0,
+    "kruskalTotalCost" : 787.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 1698,
+    "kruskalOps" : 1012
+  }, {
+    "graphId" : "13",
+    "vertices" : 58,
+    "edges" : 174,
+    "primTotalCost" : 272.0,
+    "kruskalTotalCost" : 272.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 516,
+    "kruskalOps" : 323
+  }, {
+    "graphId" : "14",
+    "vertices" : 243,
+    "edges" : 729,
+    "primTotalCost" : 1085.0,
+    "kruskalTotalCost" : 1085.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 2519,
+    "kruskalOps" : 1492
+  }, {
+    "graphId" : "15",
+    "vertices" : 231,
+    "edges" : 693,
+    "primTotalCost" : 1047.0,
+    "kruskalTotalCost" : 1047.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 2618,
+    "kruskalOps" : 1542
+  }, {
+    "graphId" : "16",
+    "vertices" : 672,
+    "edges" : 2016,
+    "primTotalCost" : 3173.0,
+    "kruskalTotalCost" : 3173.0,
+    "primExecutionMs" : 2,
+    "kruskalExecutionMs" : 2,
+    "primOps" : 7876,
+    "kruskalOps" : 4612
+  }, {
+    "graphId" : "19",
+    "vertices" : 444,
+    "edges" : 1332,
+    "primTotalCost" : 1981.0,
+    "kruskalTotalCost" : 1981.0,
+    "primExecutionMs" : 0,
+    "kruskalExecutionMs" : 0,
+    "primOps" : 5152,
+    "kruskalOps" : 3000
+  }, {
+    "graphId" : "23",
+    "vertices" : 709,
+    "edges" : 2127,
+    "primTotalCost" : 3214.0,
+    "kruskalTotalCost" : 3214.0,
+    "primExecutionMs" : 1,
+    "kruskalExecutionMs" : 1,
+    "primOps" : 8384,
+    "kruskalOps" : 4918
+  } ]
+}
