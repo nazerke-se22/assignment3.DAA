@@ -1,6 +1,6 @@
 package org.example.algorithms;
 import org.example.graph.*;
-import org.example.model.MSTResult;
+import org.example.Model.MSTResult;
 import java.util.*;
 
 public class Prim {
