@@ -1,40 +1,32 @@
 package org.example.graph;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+public class Edge implements Comparable<Edge> {
+    private final String from;
+    private final String to;
+    private final int weight;
 
-public class Edge {
-    public final String from;
-    public final String to;
-    public final int weight;
-    public Edge(String from, String to, int weight) {
+    @JsonCreator
+    public Edge(@JsonProperty("from") String from,
+                @JsonProperty("to") String to,
+                @JsonProperty("weight") int weight) {
         this.from = from;
         this.to = to;
         this.weight = weight;
     }
-    public String getFrom() {
-        return from;
+    public String getFrom() { return from; }
+    public String getTo() { return to; }
+    public int getWeight() { return weight; }
+
+    public Edge reversed() {
+        return new Edge(to, from, weight);
     }
-    public String getTo() {
-        return to;
-    }
-    public int getWeight() {
-        return weight;
+    @Override
+    public int compareTo(Edge o) {
+        return Integer.compare(this.weight, o.weight);
     }
     @Override
     public String toString() {
-        return "(" + from + " - " + to + ", w=" + weight + ")";
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Edge)) return false;
-        Edge e = (Edge) o;
-        return weight == e.weight &&
-                ((from.equals(e.from) && to.equals(e.to)) ||
-                        (from.equals(e.to) && to.equals(e.from)));
-    }
-    @Override
-    public int hashCode() {
-        String first = from.compareTo(to) < 0 ? from : to;
-        String second = from.compareTo(to) < 0 ? to : from;
-        return first.hashCode() + second.hashCode() + Integer.hashCode(weight);
+        return String.format("%s-%s(%d)", from, to, weight);
     }
 }

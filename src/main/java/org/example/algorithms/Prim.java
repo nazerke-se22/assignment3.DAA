@@ -1,36 +1,36 @@
 package org.example.algorithms;
-import org.example.graph.Graph;
-import org.example.graph.Edge;
+import org.example.graph.*;
+import org.example.model.MSTResult;
 import java.util.*;
+
 public class Prim {
-    public static List<Edge> findMST(Graph graph) {
+    public MSTResult computeMST(Graph graph) {
+        long operations = 0;
+        long start = System.nanoTime();
+
+        Set<String> visited = new HashSet<>();
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
         List<Edge> mstEdges = new ArrayList<>();
-        int numVertices = graph.V();
-        boolean[] inMST = new boolean[numVertices];
-        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingInt(Edge::getWeight));
-        inMST[0] = true;
-
-        for (Edge edge : graph.edges()) {
-            if (edge.getFrom().equals(graph.nameOf(0))) {
-                pq.add(edge);
+        int totalCost = 0;
+        String startVertex = graph.getVertices().get(0);
+        visited.add(startVertex);
+        pq.addAll(graph.adj(startVertex));
+        operations++;
+        while (!pq.isEmpty() && mstEdges.size() < graph.V() - 1) {
+            Edge e = pq.poll();
+            operations++;
+            if (visited.contains(e.getTo())) continue;
+            mstEdges.add(e);
+            totalCost += e.getWeight();
+            visited.add(e.getTo());
+            for (Edge next : graph.adj(e.getTo())) {
+                pq.add(next);
+                operations++;
             }
         }
-        while (!pq.isEmpty()) {
-            Edge edge = pq.poll();
-            if (!inMST[graph.indexOf(edge.getTo())]) {
-                mstEdges.add(edge);
-                inMST[graph.indexOf(edge.getTo())] = true;
-
-                for (Edge nextEdge : graph.edges()) {
-                    if (nextEdge.getFrom().equals(edge.getTo()) && !inMST[graph.indexOf(nextEdge.getTo())]) {
-                        pq.add(nextEdge);
-                    }
-                }
-            }
-        }
-        return mstEdges;
-    }
-    public static List<Edge> run(Graph graph) {
-        return findMST(graph);
+        long end = System.nanoTime();
+        long durationMs = (end - start) / 1_000_000;
+        return new MSTResult("Prim", graph.id(), mstEdges,
+                totalCost, durationMs, operations);
     }
 }

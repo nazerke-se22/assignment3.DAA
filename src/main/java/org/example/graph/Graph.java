@@ -24,7 +24,7 @@ public class Graph {
         for (Edge e : edges) {
             adj.get(e.getFrom()).add(e);
             if (!directed) {
-                adj.get(e.getTo()).add(e);
+                adj.get(e.getTo()).add(new Edge(e.getTo(), e.getFrom(), e.getWeight()));
             }
         }
     }
